@@ -1,13 +1,5 @@
-import React from 'react';
-import Dashboard from '../components/Dashboard';
-import ECDCList from '../components/ECDCList';
+import ECDCMap from '../components/ECDCMap';
 
-const ECDCListPage = () => {
-  return (
-    <Dashboard title="ECDC List">
-      <ECDCList />
-    </Dashboard>
-  );
-};
-
-export default ECDCListPage;
+export default function ECDCListPage() {
+  return <ECDCMap />;
+}

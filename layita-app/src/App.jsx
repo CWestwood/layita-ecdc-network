@@ -30,7 +30,7 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={!session ? <LoginPage /> : <Navigate to="/" />} />
+        <Route path="/login" element={!session ? <LoginPage /> : <Navigate to="/ecdc-list" />} />
         <Route path="/" element={session ? <DashboardPage /> : <Navigate to="/login" />} />
         <Route path="/practitioners" element={session ? <PractitionersPage /> : <Navigate to="/login" />} />
         <Route path="/outreach-visits" element={session ? <OutreachVisitsPage /> : <Navigate to="/login" />} />
