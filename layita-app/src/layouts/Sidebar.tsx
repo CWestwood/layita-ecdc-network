@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "../features/auth/supabaseClient";
 import { NavLink } from "react-router-dom";
-import { NAV_ITEMS } from "../routes/navItems";
+import { NAV_ITEMS } from "../routes/Navitems";
 import logo from "../assets/layitalogosvg.svg";
 
 interface UserProfile {
