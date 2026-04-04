@@ -1,0 +1,251 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   shared.css  –  Sidebar + page-shell styles shared across all views
+   Requires layita_colors CSS variables to be defined upstream.
+───────────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+@import './layita_colors.css';
+
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* ── Page shell ── */
+.page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: 'Raleway', sans-serif;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+  width: 250px;
+  min-width: 250px;
+  background: var(--color-bg-panel);
+  border-right: 1px solid var(--color-border);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  z-index: 200;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition:
+    width 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+    min-width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.sidebar--collapsed {
+  width: 56px;
+  min-width: 56px;
+}
+
+/* ── Sidebar top ── */
+.sidebar__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 12px;
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+  min-height: 58px;
+  background: var(--color-bg-panel);
+}
+
+.sidebar__logo {
+  width: 100px;
+  opacity: 1;
+  transition: opacity 0.15s, width 0.28s;
+}
+
+.sidebar--collapsed .sidebar__logo {
+  width: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.sidebar__collapse-btn {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 5px 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: color 0.15s, border-color 0.15s, background 0.15s;
+}
+
+.sidebar--collapsed .sidebar__collapse-btn {
+  margin: 0 auto;
+}
+
+.sidebar__collapse-btn:hover {
+  color: var(--color-secondary);
+  border-color: var(--color-secondary);
+  background: var(--color-secondary-light);
+}
+
+/* ── Sidebar nav ── */
+.sidebar__nav {
+  flex: 1;
+  padding: 10px 8px;
+  overflow: hidden;
+}
+
+.sidebar__nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar__nav li {
+  margin-bottom: 2px;
+  position: relative;
+}
+
+.sidebar__nav a {
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 7px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sidebar__nav a:hover {
+  background: var(--color-secondary-light);
+  color: var(--color-text);
+}
+
+.sidebar__nav a.active {
+  background: var(--color-primary-tint-15);
+  color: var(--color-primary-deep);
+  font-weight: 600;
+}
+
+.sidebar__nav-label {
+  opacity: 1;
+  transition: opacity 0.15s;
+  overflow: hidden;
+}
+
+.sidebar--collapsed .sidebar__nav-label {
+  opacity: 0;
+  width: 0;
+  pointer-events: none;
+}
+
+/* Tooltip when collapsed */
+.sidebar--collapsed .sidebar__nav a::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  left: calc(100% + 10px);
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  font-size: 0.75rem;
+  font-family: 'Raleway', sans-serif;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s;
+  z-index: 9999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar--collapsed .sidebar__nav a:hover::after {
+  opacity: 1;
+}
+
+/* ── Sidebar footer (used for legend etc.) ── */
+.sidebar__footer {
+  padding: 10px 10px 16px;
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.sidebar__user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar__user-info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar__user-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: "Raleway", sans-serif;
+  color: var(--color-text);
+}
+
+.sidebar__user-role {
+  font-size: 0.7rem;
+  font-family: "Raleway", sans-serif;
+  font-weight: 400;
+  color: var(--color-text-muted);
+
+  text-transform:capitalize;
+  color: var(--color-text-muted);
+}
+
+/* ── Shared spinner ── */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+.spinner--sm {
+  width: 10px;
+  height: 10px;
+  border: 1.5px solid var(--color-primary-tint-25);
+  border-top-color: var(--color-primary);
+}
+
+.spinner--md {
+  width: 18px;
+  height: 18px;
+  border: 2.5px solid var(--color-primary-tint-25);
+  border-top-color: var(--color-primary);
+}
+
+/* ── Shared loading overlay ── */
+.loading-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: var(--color-primary-deep);
+  font-weight: 600;
+}

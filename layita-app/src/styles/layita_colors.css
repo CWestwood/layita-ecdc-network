@@ -1,0 +1,75 @@
+:root {
+  /* ─────────────────────────────────────────────────────────────────────────
+     LAYITA COLOR PALETTE (Primitives)
+     ───────────────────────────────────────────────────────────────────────── */
+  --ly-color-blue: #86b5b9;
+  --ly-color-blue-dark: #5a9099;
+  --ly-color-blue-deep: #2d6b73;
+  --ly-color-orange: #fc8438;
+  --ly-color-orange-light: #fda461;
+  --ly-color-orange-deep: #d96520;
+
+  --ly-color-gray: #7f7f7f;
+  --ly-color-gray-light: #b0b8c1;
+  --ly-color-gray-lighter: #d1d9e0;
+  --ly-color-gray-lightest: #eef1f4;
+  --ly-color-white: #ffffff;
+  --ly-color-off-white: #f6f8fa;
+  --ly-color-near-white: #f0f3f6;
+
+  --ly-color-ink: #090b0d;
+  --ly-color-ink-mid: #3d4f5c;
+  --ly-color-ink-light: #637381;
+
+  --ly-color-success: #1e7e44;
+  --ly-color-success-bg: #eaf6ee;
+  --ly-color-danger: #c0392b;
+  --ly-color-danger-bg: #fdecea;
+  --ly-color-warning: #956c00;
+  --ly-color-warning-bg: #fdf4dc;
+
+  /* ─────────────────────────────────────────────────────────────────────────
+     THEME TOKENS (Matched to ecdcMap.css naming)
+     ───────────────────────────────────────────────────────────────────────── */
+  
+  /* Brand / Interactive */
+  --color-primary: var(--ly-color-blue);
+  --color-primary-dark: var(--ly-color-blue-dark);
+  --color-primary-deep: var(--ly-color-blue-deep);
+  --color-secondary: var(--ly-color-orange);
+  --color-secondary-light: var(--ly-color-orange-light);
+  --color-secondary-dark: var(--ly-color-orange-deep);
+
+  /* Text */
+  --color-text: var(--ly-color-ink);
+  --color-text-secondary: var(--ly-color-ink-mid);
+  --color-text-muted: var(--ly-color-ink-light);
+  --color-text-disabled: var(--ly-color-gray-light);
+
+  /* Backgrounds & Surfaces */
+  --color-background: var(--ly-color-white);
+  --color-bg-subtle: var(--ly-color-off-white);
+  --color-bg-sunken: var(--ly-color-near-white);
+  --color-bg-hover: var(--ly-color-gray-lightest);
+  --color-bg-panel: var(--ly-color-white);
+
+  /* Borders */
+  --color-border: var(--ly-color-gray-lighter);
+  --color-border-strong: var(--ly-color-gray-light);
+
+  /* Semantic */
+  --color-success: var(--ly-color-success);
+  --color-success-bg: var(--ly-color-success-bg);
+  --color-danger: var(--ly-color-danger);
+  --color-danger-bg: var(--ly-color-danger-bg);
+  --color-warning: var(--ly-color-warning);
+  --color-warning-bg: var(--ly-color-warning-bg);
+
+  /* Tints & Glows */
+  --color-primary-tint-08: rgba(134, 181, 185, 0.08);
+  --color-primary-tint-15: rgba(134, 181, 185, 0.15);
+  --color-primary-tint-25: rgba(134, 181, 185, 0.25);
+  --color-primary-glow: rgba(90, 144, 153, 0.35);
+  --color-secondary-tint-10: rgba(252, 132, 56, 0.10);
+  --color-secondary-tint-20: rgba(252, 132, 56, 0.20);
+}
