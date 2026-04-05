@@ -153,7 +153,7 @@ export default function VisitEditForm({ visit: v, onDone, onSaved }: Props) {
     setSaving(false);
 
     if (saveError) { setError(saveError.message); return; }
-    if (count === 0) { setError('Permission denied — only administrators can edit visits.'); return; }
+    if (count === 0) { setError('Permission denied — you do not have permission to edit this visit.'); return; }
 
     onSaved?.();
     onDone();

@@ -24,7 +24,7 @@ export default function VisitDetail({ visit: v, onClose }: Props) {
   const handleEditClick = async () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
-      alert('Permission denied — only administrators can access the edit form.');
+      alert('Permission denied — you must be logged in to access the edit form.');
       return;
     }
 
@@ -34,8 +34,9 @@ export default function VisitDetail({ visit: v, onClose }: Props) {
       .eq('id', user.id)
       .single();
 
-    if (profile?.role !== 'Administrator') {
-      alert('Permission denied — only administrators can access the edit form.');
+    const role = profile?.role?.toLowerCase();
+    if (role !== 'administrator' && role !== 'manager') {
+      alert('Permission denied — only administrators and managers can access the edit form.');
       return;
     }
 
