@@ -1243,3 +1243,185 @@
 
 .audit-bool--yes { color: var(--color-success); font-weight: 600; font-family: "Raleway", sans-serif; }
 .audit-bool--no  { color: var(--color-danger);  font-weight: 600; font-family: "Raleway", sans-serif; }
+
+/* ── Edit form ─────────────────────────────────────────────────────────────── */
+
+.p2-edit-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.p2-edit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
+}
+
+.p2-edit-title {
+  font-family: 'Raleway', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.p2-edit-close {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--color-text-muted);
+  transition: background 0.12s, color 0.12s;
+}
+
+.p2-edit-close:hover {
+  background: var(--color-bg-hover);
+  color: var(--color-text);
+}
+
+.p2-edit-body {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  background: var(--color-background);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.p2-edit-body::-webkit-scrollbar { width: 4px; }
+.p2-edit-body::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 2px; }
+
+.p2-edit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.p2-edit-label {
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.70rem;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.p2-edit-input,
+.p2-edit-select {
+  height: 36px;
+  padding: 0 12px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background: var(--color-bg-sunken);
+  color: var(--color-text);
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.p2-edit-input:focus,
+.p2-edit-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-tint-15);
+  background: var(--color-background);
+}
+
+.p2-edit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.p2-edit-section-heading {
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-primary-deep);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-top: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.p2-edit-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.85rem;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.p2-edit-error {
+  padding: 12px;
+  border-radius: 6px;
+  background: var(--color-danger-bg);
+  color: var(--color-danger);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.p2-edit-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.p2-edit-btn {
+  height: 36px;
+  padding: 0 16px;
+  border-radius: 6px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+}
+
+.p2-edit-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.p2-edit-btn--ghost {
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.p2-edit-btn--ghost:hover:not(:disabled) {
+  background: var(--color-bg-hover);
+}
+
+.p2-edit-btn--primary {
+  background: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  color: #fff;
+}
+
+.p2-edit-btn--primary:hover:not(:disabled) {
+  background: var(--color-primary-deep);
+  border-color: var(--color-primary-deep);
+}

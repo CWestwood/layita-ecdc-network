@@ -38,14 +38,13 @@ export default function Sidebar({ footer = null, defaultCollapsed = false }) {
         }
       }
     }
-
     getProfile();
   }, []); 
 
   const [collapsed, setCollapsed] = useState(defaultCollapsed);
 
   return (
-    <aside className={`sidebar ${collapsed ? "collapsed" : ""}`}>
+    <aside className={`sidebar ${collapsed ? "sidebar--collapsed" : ""}`}>
       <div className="sidebar__top">
         <div className="sidebar__logo-area">
           <img src={logo} alt="Layita Logo" className="sidebar__logo" />
@@ -84,8 +83,8 @@ export default function Sidebar({ footer = null, defaultCollapsed = false }) {
                 className={({ isActive }) => (isActive ? "active" : "")}
                 data-tooltip={label}
               >
-                <span className="nav-icon">{icon}</span>
-                <span className="nav-label">{label}</span>
+                <span className="sidebar__nav-icon">{icon}</span>
+                <span className="sidebar__nav-label">{label}</span>
               </NavLink>
             </li>
           ))}

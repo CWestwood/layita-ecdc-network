@@ -1,0 +1,206 @@
+import { useState, useEffect } from 'react';
+import { supabase } from '../auth/supabaseClient';
+import { Practitioner } from './types';
+import { Icon, Icons } from './_components';
+
+interface Group {
+  id: string;
+  group_name: string;
+}
+
+interface ECDC {
+  id: string;
+  name: string;
+}
+
+interface Props {
+  p: Practitioner;
+  onDone: () => void;
+  onSaved?: () => void;
+}
+
+export default function PractitionerEditForm({ p, onDone, onSaved }: Props) {
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [ecdcs, setEcdcs] = useState<ECDC[]>([]);
+  const [optionsLoading, setOptionsLoading] = useState(true);
+
+  const [form, setForm] = useState({
+    name: p.name || '',
+    group_id: (p as any).group_id || (p.group as any)?.id || '',
+    ecdc_id: (p as any).ecdc_id || (p.ecdc as any)?.id || '',
+    contact_number1: p.contact_number1 || '',
+    contact_number2: p.contact_number2 || '',
+    has_whatsapp: p.has_whatsapp || false,
+    dsd_funded: p.dsd_funded || false,
+    dsd_registered: p.dsd_registered || false,
+  });
+
+  useEffect(() => {
+    async function fetchOptions() {
+      const [grpRes, ecdcRes] = await Promise.all([
+        supabase.from('groups').select('id, group_name').order('group_name'),
+        supabase.from('ecdc_list').select('id, name').order('name'),
+      ]);
+
+      const loadedGroups = grpRes.data || [];
+      const loadedEcdcs = ecdcRes.data || [];
+
+      setGroups(loadedGroups);
+      setEcdcs(loadedEcdcs);
+
+      // Resolve IDs from the nested objects if they were missing on the initial load
+      setForm((prev) => ({
+        ...prev,
+        group_id: prev.group_id || loadedGroups.find((g) => g.group_name === (p as any).group?.group_name)?.id || '',
+        ecdc_id: prev.ecdc_id || loadedEcdcs.find((e) => e.name === (p as any).ecdc?.name)?.id || '',
+      }));
+
+      setOptionsLoading(false);
+    }
+    fetchOptions();
+  }, [p]);
+
+  const set = (field: keyof typeof form, value: string | boolean) =>
+    setForm((prev) => ({ ...prev, [field]: value }));
+
+  const handleSave = async () => {
+    setSaving(true);
+    setError(null);
+
+    const { error: saveError, count } = await supabase
+      .from('practitioners')
+      .update({
+        name: form.name || null,
+        group_id: form.group_id || null,
+        ecdc_id: form.ecdc_id || null,
+        contact_number1: form.contact_number1 || null,
+        contact_number2: form.contact_number2 || null,
+        has_whatsapp: form.has_whatsapp,
+        dsd_funded: form.dsd_funded,
+        dsd_registered: form.dsd_registered,
+      }, { count: 'exact' })
+      .eq('id', p.id);
+
+    setSaving(false);
+
+    if (saveError) { 
+      setError(saveError.message); 
+      return; 
+    }
+
+    if (count === 0) { 
+      setError('Permission denied — only administrators can edit practitioners.'); 
+      return; 
+    }
+
+    onSaved?.();
+    onDone();
+  };
+
+  if (optionsLoading) {
+    return (
+      <div className="p2-detail p2-detail--empty">
+        <div className="p2-loading"><div className="p2-spinner" /> Loading options…</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p2-detail p2-edit-container">
+      <div className="p2-edit-header">
+        <h2 className="p2-edit-title">Edit practitioner</h2>
+        <button className="p2-edit-close" onClick={onDone} disabled={saving}>
+          <Icon d={Icons.close} size={14} />
+        </button>
+      </div>
+
+      <div className="p2-edit-body">
+        <div className="p2-edit-field">
+          <label className="p2-edit-label">Name</label>
+          <input
+            className="p2-edit-input"
+            value={form.name}
+            onChange={(e) => set('name', e.target.value)}
+          />
+        </div>
+
+        <div className="p2-edit-field">
+          <label className="p2-edit-label">Group</label>
+          <select
+            className="p2-edit-select"
+            value={form.group_id}
+            onChange={(e) => set('group_id', e.target.value)}
+          >
+            <option value="">— Select —</option>
+            {groups.map((g) => (
+              <option key={g.id} value={g.id}>{g.group_name}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="p2-edit-field">
+          <label className="p2-edit-label">ECDC</label>
+          <select
+            className="p2-edit-select"
+            value={form.ecdc_id}
+            onChange={(e) => set('ecdc_id', e.target.value)}
+          >
+            <option value="">— Select —</option>
+            {ecdcs.map((e) => (
+              <option key={e.id} value={e.id}>{e.name}</option>
+            ))}
+          </select>
+        </div>
+
+        <div className="p2-edit-grid">
+          <div className="p2-edit-field">
+            <label className="p2-edit-label">Primary Contact</label>
+            <input
+              className="p2-edit-input"
+              value={form.contact_number1}
+              onChange={(e) => set('contact_number1', e.target.value)}
+            />
+          </div>
+          <div className="p2-edit-field">
+            <label className="p2-edit-label">Secondary Contact</label>
+            <input
+              className="p2-edit-input"
+              value={form.contact_number2}
+              onChange={(e) => set('contact_number2', e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div className="p2-edit-section-heading">Flags</div>
+        <div className="p2-edit-grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))' }}>
+          <label className="p2-edit-checkbox-label">
+            <input type="checkbox" checked={form.has_whatsapp} onChange={(e) => set('has_whatsapp', e.target.checked)} />
+            WhatsApp
+          </label>
+          <label className="p2-edit-checkbox-label">
+            <input type="checkbox" checked={form.dsd_funded} onChange={(e) => set('dsd_funded', e.target.checked)} />
+            DSD Funded
+          </label>
+          <label className="p2-edit-checkbox-label">
+            <input type="checkbox" checked={form.dsd_registered} onChange={(e) => set('dsd_registered', e.target.checked)} />
+            DSD Registered
+          </label>
+        </div>
+
+        {error && <div className="p2-edit-error">{error}</div>}
+
+        <div className="p2-edit-footer">
+          <button className="p2-edit-btn p2-edit-btn--ghost" onClick={onDone} disabled={saving}>
+            Cancel
+          </button>
+          <button className="p2-edit-btn p2-edit-btn--primary" onClick={handleSave} disabled={saving}>
+            {saving ? 'Saving…' : 'Save changes'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}

@@ -15,6 +15,7 @@ import {
   Icons,
   FlagPill,
 } from "./_components";
+import PractitionerEditForm from "./PractitionerEditForm";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -64,6 +65,7 @@ interface Props {
 export function DetailPanel({ p, onClose }: Props) {
   const [showAllVisits, setShowAllVisits] = useState(false);
   const [expanded, setExpanded]           = useState<Set<string>>(new Set());
+  const [editing, setEditing]             = useState(false);
 
   const { data: visits = [],    isLoading: visitsLoading } = usePractitionerVisits(p.id);
   const { data: auditRows = [], isLoading: auditLoading  } = useAuditLogs({
@@ -93,6 +95,10 @@ export function DetailPanel({ p, onClose }: Props) {
       return next;
     });
 
+  if (editing) {
+    return <PractitionerEditForm p={p} onDone={() => setEditing(false)} onSaved={() => setEditing(false)} />;
+  }
+
   return (
     <div className="p2-detail">
 
@@ -112,7 +118,7 @@ export function DetailPanel({ p, onClose }: Props) {
               </div>
             )}
           </div>
-          <button className="p2-detail__editor" onClick={() => alert("Edit functionality coming soon!")}>
+      <button className="p2-detail__editor" onClick={() => setEditing(true)}>
             <Icon d={Icons.pencil} size={14} />
           </button>
           <button className="p2-detail__close" onClick={onClose} aria-label="Close">

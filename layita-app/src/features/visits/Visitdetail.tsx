@@ -3,14 +3,48 @@
 import { VisitRow } from './api/useVisits';
 import { themeColors as t } from '../../lib/layita_colors';
 import { fmtDate, resolveHappened, PencilIcon, PersonIcon, CloseIcon } from './_components';
+import VisitEditForm from './VisitEditForm';
+import { useState } from 'react';
+import { supabase } from '../auth/supabaseClient';
+
 
 interface Props {
   visit: VisitRow;
   onClose: () => void;
 }
 
+
+
+
 export default function VisitDetail({ visit: v, onClose }: Props) {
   const hap = resolveHappened(v.outreach_happened);
+
+  const [editing, setEditing] = useState(false);
+
+  const handleEditClick = async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      alert('Permission denied — only administrators can access the edit form.');
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('id', user.id)
+      .single();
+
+    if (profile?.role !== 'Administrator') {
+      alert('Permission denied — only administrators can access the edit form.');
+      return;
+    }
+
+    setEditing(true);
+  };
+
+  if (editing) {
+    return <VisitEditForm key={v.id} visit={v} onDone={() => setEditing(false)} onSaved={() => setEditing(false)} />;
+  }
 
   const metrics = [
     { label: 'Parents trained',   val: v.parents_trained        },
@@ -34,7 +68,7 @@ export default function VisitDetail({ visit: v, onClose }: Props) {
           </div>
 
           <div className="ov-detail-hero__actions">
-          <button className="ov-detail-action-btn" onClick={() => alert('Edit functionality coming soon!')}>
+          <button className="ov-detail-action-btn" onClick={handleEditClick}>
             <PencilIcon />
           </button>
           <button className="ov-detail-action-btn" onClick={onClose}>
