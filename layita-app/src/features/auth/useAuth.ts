@@ -8,17 +8,33 @@ import { supabase } from './supabaseClient';
 interface AuthState {
   session: Session | null;
   loading: boolean;
+  isAdmin: boolean;
 }
 
 export function useAuth(): AuthState {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
+  
 
   useEffect(() => {
+    let isMounted = true;
+
+    const fetchRole = async (userId: string) => {
+      const { data } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', userId)
+        .single();
+      if( isMounted) setIsAdmin(data?.role === 'administrator');
+    };
     // Hydrate from existing session on mount
-    supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session);
-      setLoading(false);
+    supabase.auth.getSession().then(async ({ data }) => {
+      if (isMounted) setSession(data.session);
+      if (data.session?.user) {
+        await fetchRole(data.session.user.id);
+      }
+      if (isMounted) setLoading(false);
     });
 
     // Keep in sync with sign-in / sign-out events
@@ -26,8 +42,13 @@ export function useAuth(): AuthState {
       setSession(session);
     });
 
-    return () => subscription.unsubscribe();
+    
+
+    return () => {
+      isMounted = false;
+      subscription.unsubscribe();
+    };
   }, []);
 
-  return { session, loading };
+  return { session, loading, isAdmin };
 }

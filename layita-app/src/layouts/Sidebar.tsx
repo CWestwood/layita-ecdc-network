@@ -3,22 +3,18 @@ import { supabase } from "../features/auth/supabaseClient";
 import { NavLink } from "react-router-dom";
 import { NAV_ITEMS } from "../routes/Navitems";
 import logo from "../assets/layitalogosvg.svg";
+import { useAuth }  from "../features/auth/useAuth";
 
 interface UserProfile {
   name: string;
   role: string;
 }
 
-/**
- * Sidebar
- *
- * Props:
- * footer           – optional ReactNode rendered at the bottom (defaults to the user profile)
- * defaultCollapsed – boolean, default false
- */
 export default function Sidebar({ footer = null, defaultCollapsed = false }) {
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
+  const { isAdmin, loading } = useAuth()
+  const visibleItems = loading ? [] : NAV_ITEMS.filter(item => item.role === "all" || (item.role === "admin" && isAdmin));
 
   useEffect(() => {
     async function getProfile() {
@@ -76,7 +72,7 @@ export default function Sidebar({ footer = null, defaultCollapsed = false }) {
           {/* Note: If you want to add the "nav-section-label" (e.g., "Overview", "Programme") 
               like in the HTML, you will need to update your NAV_ITEMS array to include section 
               headers and map through them here. */}
-          {NAV_ITEMS.map(({ to, label, icon }) => (
+          {visibleItems.map(({ to, label, icon }) => (
             <li key={to}>
               <NavLink
                 to={to}

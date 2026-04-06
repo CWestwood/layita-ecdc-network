@@ -5,6 +5,6 @@ import path from 'path';
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    dedupe: ['react', 'react-dom'], // ← add this
+    dedupe: ['react', 'react-dom'],
   },
 });

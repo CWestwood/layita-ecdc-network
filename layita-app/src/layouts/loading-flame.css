@@ -1,0 +1,44 @@
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  z-index: 9999;
+}
+
+.loading-flame {
+  width: 32px;
+  height: 32px;
+  transform-origin: center bottom;
+  animation: flame-flicker 1.4s ease-in-out infinite;
+}
+
+.loading-text {
+  font-size: 13px;
+  color: #666;
+  letter-spacing: 0.08em;
+}
+
+/* flame flicker */
+@keyframes flame-flicker {
+  0%   { transform: scale(0.96) rotate(-1deg); opacity: 0.85; }
+  25%  { transform: scale(1.02) rotate(1deg);  opacity: 1; }
+  50%  { transform: scale(0.98) rotate(-0.5deg); }
+  75%  { transform: scale(1.03) rotate(0.5deg); }
+  100% { transform: scale(0.96) rotate(-1deg); opacity: 0.85; }
+}
+
+.loading-flame {
+  filter: drop-shadow(0 0 6px rgba(255,120,0,0.35));
+  animation: flame-flicker 1.4s ease-in-out infinite,
+             flame-glow 2s ease-in-out infinite;
+}
+
+@keyframes flame-glow {
+  0%,100% { filter: drop-shadow(0 0 4px rgba(255,120,0,0.3)); }
+  50%     { filter: drop-shadow(0 0 14px rgba(255,120,0,0.6)); }
+}

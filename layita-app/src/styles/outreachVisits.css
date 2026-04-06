@@ -804,3 +804,375 @@
   justify-content: flex-end;
   gap: 4px;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   outreachVisits.mobile.css  –  Mobile & responsive overrides for outreachVisits.css
+   Import AFTER outreachVisits.css.
+───────────────────────────────────────────────────────────────────────────── */
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLET  (≤ 1024px)
+   Hide the detail panel; it opens as an overlay instead.
+   The list grid becomes simpler.
+══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  /* Topbar: allow wrapping / tighter gaps */
+  .ov-topbar {
+    padding: 0 16px;
+    gap: 10px;
+  }
+
+  /* Shrink the search bar a little */
+  .ov-search-wrap {
+    width: 140px;
+    text-wrap: nowrap;
+  }
+
+  /* Stats strip: smaller numbers */
+  .ov-stat {
+    padding: 8px 12px;
+  }
+
+  .ov-stat__value {
+    font-size: 1rem;
+  }
+
+  /* Grid columns: drop the wide notes/comment column */
+  .ov-list-header,
+  .ov-row {
+    grid-template-columns: 90px 180px 140px 110px 90px 90px 90px;
+    /* note: 8th column (400px notes) hidden via column count reduction */
+  }
+
+  /* Hide the notes column header + cell */
+  .ov-list-header > div:nth-child(8),
+  .ov-row > *:nth-child(8) {
+    display: none;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE  (≤ 768px)
+   The split list + detail view collapses.
+   List takes full width; detail slides in as a fixed overlay.
+══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  .ov-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    column-gap: 12px;
+    row-gap: 3px;
+    padding: 10px 16px;
+    min-height: auto;
+    border-left-width: 4px;
+    align-items: start;
+  }
+
+  /* Left column: date → name → ECDC */
+  .ov-row__date        { grid-column: 2; grid-row: 1; font-size: 0.68rem; color: var(--color-text-muted); }
+  .ov-row__practitioner{ grid-column: 1; grid-row: 1; font-size: 0.9rem; font-weight: 600; white-space: normal; }
+  
+
+  /* Right column: type badge → happened/status → comment */
+  .ov-row__type        { grid-column: 1; grid-row: 3; }
+  .ov-row__badge       { grid-column: 2; grid-row: 3; }
+  
+  /* Hide metric/notes columns that aren't meaningful in card view */
+  .ov-row__dash        { display: none !important; }
+  .ov-row__metric      { display: none !important; }
+  .ov-row__ecdc        { display: none !important; }
+  .ov-row__comment     { display: none !important; }
+  .ov-row__camera      { display: none !important; }
+    /* ── Main column fills screen (minus bottom nav) ── */
+    .ov-main {
+      height: 100%;
+    }
+
+  /* ── Topbar: compact two-line layout ── */
+  .ov-topbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 16px;
+    gap: 8px;
+  }
+
+  .ov-topbar__title {
+    font-size: 0.85rem;
+    flex: 0 0 100%; /* own line */
+  }
+
+  .ov-topbar__controls {
+    flex: 1;
+    gap: 8px;
+  }
+
+  /* Search bar expands to fill available space */
+  .ov-search-wrap {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+
+  /* ── Filter bar: tighter padding, touch-scroll ── */
+  .ov-filterbar {
+    padding: 4px 2px;
+    gap: 6px;
+  }
+
+  /* Make chips slightly taller for touch */
+  .ov-chip {
+    padding: 4px 6px;
+    font-size: 0.68rem;
+  }
+
+  /* ── Stats strip: 2 columns on mobile ── */
+  .ov-stats {
+    flex-wrap: wrap;
+      }
+
+  .ov-stat {
+    flex: 1 1 33.3%;
+    border-right: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    box-sizing: border-box;
+  }
+
+  /* Remove double borders on the right & bottom edges */
+  .ov-stat:nth-child(3n) { border-right: none; }
+  .ov-stat:last-child,
+  .ov-stat:nth-last-child(2):nth-child(odd) { border-bottom: none; }
+
+  /* ── Body: single-column, no side-by-side panels ── */
+  .ov-body {
+    flex-direction: column;
+  }
+
+  /* List panel expands full width */
+  .ov-list-panel {
+    border-right: none;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── Table header: switch to card layout (hide header row) ── */
+  .ov-list-header {
+    display: none; /* replace with card-style rows below */
+  }
+
+  /* ── Visit rows: card layout instead of grid ── */
+  .ov-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 12px 16px;
+    min-height: auto;
+    border-left-width: 4px;
+    grid-template-columns: none; /* reset grid */
+  }
+
+  /* Show all cells; reset grid-specific hiding */
+  .ov-row > * {
+    display: block !important;
+  }
+
+  /* Date is the small label at top */
+  .ov-row__date {
+    font-size: 0.68rem;
+    color: var(--color-text-muted);
+    margin-bottom: 1px;
+  }
+
+  /* Practitioner name is the headline */
+  .ov-row__practitioner {
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+
+  /* ECDC centre below name */
+  .ov-row__ecdc {
+    font-size: 0.72rem;
+  }
+
+  /* Type, status, etc. flow inline */
+  .ov-row__type,
+  .ov-row__status,
+  .ov-row__happened {
+    display: inline-flex !important;
+    margin-top: 4px;
+    margin-right: 4px;
+  }
+
+  /* Notes column: small italic text */
+  .ov-row__notes {
+    display: block !important;
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-top: 2px;
+    white-space: normal;
+  }
+
+  /* ── Detail panel: fixed full-screen overlay ── */
+  .ov-detail-panel {
+    position: fixed;
+    inset: 0;
+    bottom: 60px; /* above bottom nav */
+    z-index: 120;
+    background: var(--color-bg-subtle);
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .ov-detail-panel--open {
+    transform: translateX(0);
+  }
+
+  /* Empty state: full width */
+  .ov-detail-empty {
+    display: none; /* hide empty state; list is shown by default */
+  }
+
+  /* ── Detail hero: more breathing room ── */
+  .ov-detail-hero {
+    padding: 16px 16px;
+  }
+
+  .ov-detail-prac-name {
+    font-size: 1.1rem;
+  }
+
+  /* ── Metric grid: 1 column on small screens ── */
+  .ov-metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Edit form: full-width overlay ── */
+  .ov-edit-form {
+    position: fixed;
+    inset: 0;
+    bottom: 60px;
+    z-index: 130;
+    padding: 16px 16px 24px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-left: 0;
+    border-left: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .ov-edit-grid {
+    grid-template-columns: 1fr; /* single column on mobile */
+  }
+
+  /* Month headers: reduce left padding to match cards */
+  .ov-month-header {
+    padding: 8px 16px 6px;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SMALL PHONE  (≤ 480px)
+══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+
+  .ov-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    background: var(--color-primary-tint-25);
+    border-left: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+    column-gap: 12px;
+    row-gap: 3px;
+    padding: 10px 16px;
+    min-height: auto;
+    border-left-width: 2px;
+    align-items: start;
+  }
+
+  /* Left column: date → name → ECDC */
+  .ov-row__date        { grid-column: 2; grid-row: 1; font-size: 0.7rem; font-weight: 600; color: var(--color-text-muted); }
+  .ov-row__practitioner{ grid-column: 1; grid-row: 1; font-size: 0.8rem; font-weight: 600; white-space: normal; }
+  
+
+  /* Right column: type badge → happened/status → comment */
+  .ov-row__type        { grid-column: 1; grid-row: 3; }
+  .ov-row__badge       { grid-column: 2; grid-row: 3; }
+  
+  
+
+  /* Hide metric/notes columns that aren't meaningful in card view */
+  .ov-row__dash        { display: none !important; }
+  .ov-row__metric      { display: none !important; }
+  .ov-row__ecdc        { display: none !important; }
+  .ov-row__comment     { display: none !important; }
+  .ov-row__camera      { grid-column: 2; grid-row: 1; margin-left: auto; }
+
+  /* Detail panel sits above the 54px bottom nav */
+  .ov-detail-panel {
+    bottom: 54px;
+    width: 100%;
+  }
+
+  .ov-edit-form {
+    bottom: 54px;
+    width: 100%;
+  }
+
+  /* Topbar: hide the title text to save space */
+  .ov-topbar__title {
+    flex: 1;
+    text-align: center;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.9rem;
+    color: var(--color-text);
+  }
+
+  /* Stats: stack all into single column */
+  .ov-stat {
+    flex: 1 1 33.33%;
+    border-right: none;
+  }
+
+  .ov-stat:last-child { border-bottom: none; }
+
+  /* Select (sort) dropdown: fill remaining space */
+  .ov-select {
+    flex: 0.7 ;
+    width: auto;
+    height: 32px
+  }
+
+  .ov-search-input {
+    height: 32px;
+    padding: 6px 10px 6px 28px;
+  }
+
+  .ov-filterbar {
+    flex: 0 0 5%;
+    grid-auto-columns: minmax(80px, 1fr);
+  }
+
+  /* Slightly larger touch targets */
+  .ov-row {
+    flex: 1 1 33.33%;
+    min-width: 0;
+    padding: 4px 14px;
+
+  }
+
+  /* Compact no-results message */
+  .ov-no-results {
+    padding: 32px 16px;
+    font-size: 0.82rem;
+  }
+}

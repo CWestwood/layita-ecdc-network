@@ -138,7 +138,7 @@
 
 /* ── View toggle ───────────────────────────────────────────────────────────── */
 
-.p2-view-toggle {
+/*.p2-view-toggle {
   display: flex;
   border: 1px solid var(--color-border);
   border-radius: 7px;
@@ -168,7 +168,7 @@
 .p2-view-btn:hover:not(.p2-view-btn--active) {
   background: var(--color-secondary-light);
   color: var(--color-text);
-}
+} */
 
 /* ── Filter bar ────────────────────────────────────────────────────────────── */
 
@@ -254,6 +254,27 @@
   border-radius: 50%;
   flex-shrink: 0;
 }
+
+/* ── Filter Dropdowns (Mobile) ─────────────────────────────────────────────── */
+.p2-filter-select {
+  display: none; /* Hidden on desktop */
+  height: 30px;
+  padding: 0 28px 0 10px;
+  background: var(--color-bg-sunken);
+  border: 1px solid var(--color-border);
+  border-radius: 7px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  outline: none;
+  cursor: pointer;
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 1L5 5L9 1" stroke="%236B7280" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+}
+.p2-filter-select:focus { border-color: var(--color-primary); }
 
 /* ── Stats strip ───────────────────────────────────────────────────────────── */
 
@@ -425,6 +446,10 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.p2-row__group-short {
+  display: none;
 }
 
 .p2-row__ecdc {
@@ -1424,4 +1449,348 @@
 .p2-edit-btn--primary:hover:not(:disabled) {
   background: var(--color-primary-deep);
   border-color: var(--color-primary-deep);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLET  (≤ 1024px)
+   List panel is narrower; detail panel still shows beside it.
+══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  /* Topbar: tighten padding */
+  .p2-topbar {
+    padding: 0 16px;
+    gap: 10px;
+  }
+
+  /* Shrink search to fit */
+  .p2-search {
+    width: 200px;
+  }
+
+  /* List panel: narrower */
+  .p2-list-panel {
+    width: 360px;
+    min-width: 280px;
+  }
+
+  .p2-row__group {
+    display: none
+  }
+
+  .p2-row__group-short {
+    display: inline-block;
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+    font-family: "Raleway", sans-serif;
+  }
+
+  /* Stats: slightly smaller values */
+  .p2-stat__value {
+    font-size: 1rem;
+  }
+
+  /* Table header columns: drop the last (status) column */
+  .p2-list-header {
+    grid-template-columns: minmax(140px, 2fr) minmax(110px, 1.5fr) 120px minmax(90px, 1fr);
+  }
+
+  /* Hide 5th column (e.g. actions / status dots) */
+  .p2-list-header > div:nth-child(5),
+  .p2-list-row > *:nth-child(5) {
+    display: none;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE  (≤ 768px)
+   List fills full width. Detail slides in as a fixed full-screen overlay.
+   Cards replace the table-row layout.
+══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── Page / main ── */
+  .p2-page {
+    flex-direction: column;
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .p2-main {
+    overflow: hidden;
+  }
+
+  /* ── Topbar: wrap onto two rows ── */
+  .p2-topbar {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 58px;
+    padding: 10px 14px;
+    gap: 8px;
+  }
+
+  /* Title + subtitle on their own line */
+  .p2-topbar__title {
+    flex: 0 0 auto;
+  }
+
+  .p2-topbar__subtitle {
+    flex: 0 0 auto;
+  }
+
+  /* Controls row below title */
+  .p2-topbar__controls {
+    flex: 1 1 100%;
+    gap: 8px;
+  }
+
+  /* Search expands to fill available row space */
+  .p2-search {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+
+  /* ── Filter bar: touch-friendly ── */
+  .p2-filters {
+    padding: 8px 12px;
+    gap: 6px;
+    flex-wrap: wrap;
+    overflow: visible;
+  }
+
+  .p2-chip {
+    display: none; /* Hide desktop chips */
+  }
+
+  .p2-chip.p2-chip--clear {
+    display: inline-flex; /* Ensure the Clear button remains visible */
+    width: 100%;
+    justify-content: center;
+    height: 30px;
+    font-size: 0.76rem;
+  }
+
+  .p2-filters__label,
+  .p2-filters__divider {
+    display: none;
+  }
+
+  .p2-filter-select {
+    display: block; /* Show dropdowns */
+    flex: 1 1 calc(50% - 4px);
+    min-width: 120px;
+  }
+
+  .p2-row__group-full {
+    display: none
+  }
+
+  .p2-row__group-short {
+    display: inline-block;
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+    font-family: "Raleway", sans-serif;
+  }
+
+  /* ── Stats strip: Hidden on mobile ── */
+  .p2-stats {
+    display: none;
+  }
+
+  /* ── Body: single column ── */
+  .p2-body {
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── List panel: full width ── */
+  .p2-list-panel {
+    width: 100% !important;
+    min-width: 0;
+    border-right: none;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* Hide the table header row; use card layout instead */
+  .p2-list-header {
+    display: none;
+  }
+
+  /* ── Practitioner rows → card layout ── */
+  .p2-list-row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    padding: 12px 16px;
+    border-left-width: 4px;
+    min-height: auto;
+    grid-template-columns: none; /* override grid from desktop */
+  }
+
+  /* Reset grid-span hiding from tablet */
+  .p2-list-row > * {
+    display: block !important;
+  }
+
+  /* Name is the headline */
+  .p2-list-row__name {
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  /* ECDC centre subtitle */
+  .p2-list-row__centre {
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Group, training, visit status flow inline */
+  .p2-list-row__group,
+  .p2-list-row__training,
+  .p2-list-row__visit {
+    display: inline-flex !important;
+    margin-top: 4px;
+    margin-right: 4px;
+  }
+
+  /* Action dots / buttons */
+  .p2-list-row__actions {
+    display: inline-flex !important;
+    margin-top: 6px;
+  }
+
+  /* ── Detail panel: fixed full-screen slide-in ── */
+  .p2-detail-panel {
+    position: fixed;
+    inset: 0;
+    bottom: 60px; /* above shared bottom nav */
+    z-index: 120;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: var(--color-bg-subtle);
+    transform: translateX(100%);
+    transition: transform 0.26s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Override the existing 900px rule that uses position:fixed/inset:0 */
+  .p2-detail-panel--open {
+    transform: translateX(0);
+    overflow-y: auto;
+  }
+
+  /* ── Edit form: same full-screen pattern ── */
+  .p2-edit-container {
+    height: auto;
+  }
+
+  .p2-edit-body {
+    padding: 16px;
+  }
+
+  .p2-edit-grid {
+    grid-template-columns: 1fr; /* single column */
+  }
+
+  /* ── Grid / card view ── */
+  /* Practitioner cards in grid view: 2 columns */
+  .p2-grid {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 12px;
+    gap: 10px;
+  }
+
+  /* ── Audit section ── */
+  .audit-event__changed {
+    display: none; /* too much text at small sizes */
+  }
+
+  .audit-field__name {
+    min-width: 80px;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SMALL PHONE  (≤ 480px)
+══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  /* Detail panel: account for 54px bottom nav */
+  .p2-detail-panel {
+    bottom: 54px;
+  }
+
+  /* Topbar: hide subtitle on very small screens */
+  .p2-topbar__subtitle {
+    display: none;
+  }
+
+  .p2-row__group-full {
+    display: none
+  }
+
+  .p2-row__group-short {
+    display: inline-block;
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+    font-family: "Raleway", sans-serif;
+  }
+
+  /* Grid view: single column on tiny phones */
+  .p2-grid {
+    grid-template-columns: 1fr;
+    padding: 10px;
+  }
+
+  /* Filters: allow slightly smaller chips */
+  .p2-chip {
+    height: 28px;
+    padding: 0 10px;
+    font-size: 0.72rem;
+  }
+
+  .p2-filter-select {
+    flex: 1 1 100%; /* Stack dropdowns vertically on very small screens */
+  }
+
+  /* View toggle: slightly smaller */
+  .p2-view-btn {
+    width: 30px;
+    height: 30px;
+  }
+
+  /* Select / sort: fill remaining space */
+  .p2-select {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Edit form: tighter padding */
+  .p2-edit-body {
+    padding: 12px;
+    gap: 14px;
+  }
+
+  .p2-edit-header {
+    padding: 14px 16px;
+  }
+
+  .p2-edit-footer {
+    flex-direction: column-reverse;
+    gap: 8px;
+  }
+
+  .p2-edit-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Empty state: less padding */
+  .p2-empty {
+    padding: 40px 20px;
+  }
 }

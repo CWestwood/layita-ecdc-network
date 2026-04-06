@@ -35,7 +35,8 @@ export default function PractitionerRow({ p, selected, lastVisit, onClick }: Pro
         <span className="p2-row__name">{p.name || "—"}</span>
         {group && (
           <span className="p2-row__group" style={{ color: color.fill }}>
-            {anySelected ? resolveGroupNameShortForm(group) : group}
+            <span className="p2-row__group-full">{anySelected ? resolveGroupNameShortForm(group) : group}</span>
+            <span className="p2-row__group-short">{resolveGroupNameShortForm(group)}</span>
           </span>
         )}
       </div>

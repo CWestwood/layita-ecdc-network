@@ -160,7 +160,7 @@ export default function Practitioners() {
               ))}
             </select>
 
-            <div className="p2-view-toggle" role="group" aria-label="View mode">
+            {/*<div className="p2-view-toggle" role="group" aria-label="View mode">
               <button
                 className={`p2-view-btn ${viewMode === "list" ? "p2-view-btn--active" : ""}`}
                 onClick={() => setViewMode("list")}
@@ -171,7 +171,7 @@ export default function Practitioners() {
                 onClick={() => setViewMode("grid")}
                 title="Grid view"
               ><GridIcon /></button>
-            </div>
+            </div> */}
           </div>
         </header>
 

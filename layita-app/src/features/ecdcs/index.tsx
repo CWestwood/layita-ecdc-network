@@ -1,6 +1,6 @@
 // src/features/ecdcMap/index.tsx
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useRef } from 'react';
 import { MapContainer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -30,6 +30,8 @@ import {
 
 import '../../styles/shared.css';
 import '../../styles/ecdcMap.css';
+
+import { exportReportAsPDF, exportReportAsExcel } from './exportUtils';
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -68,6 +70,8 @@ export default function ECDCMap() {
   }, [globalVisits]);
 
   const loading = ecdcsLoading || landmarksLoading;
+
+  const drawerBodyRef = useRef<HTMLDivElement>(null);
 
   // ── Legend groups (sidebar footer) ──────────────────────────────────────────
   const legendGroups = useMemo(() => {
@@ -638,10 +642,39 @@ export default function ECDCMap() {
                   Selected ECDCs
                   <span className="ecdc-report-drawer__subtitle">{selectedEcdcs.length} centre{selectedEcdcs.length !== 1 ? 's' : ''}</span>
                 </div>
-                <button className="ecdc-report-drawer__close" onClick={() => setReportOpen(false)}>✕</button>
+
+              <div className="ecdc-report-export-btns">
+                <button
+                  className="ecdc-report-export-btn"
+                  title="Export as Excel"
+                  onClick={() => exportReportAsExcel(selectedEcdcs, lastVisitMap)}
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="8" y1="13" x2="16" y2="13"/>
+                    <line x1="8" y1="17" x2="16" y2="17"/>
+                  </svg>
+                  Excel
+                </button>
+                <button
+                  className="ecdc-report-export-btn"
+                  title="Export as PDF"
+                  onClick={() => drawerBodyRef.current && exportReportAsPDF(drawerBodyRef.current)}
+                >
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="9" y1="15" x2="15" y2="15"/>
+                  </svg>
+                  PDF
+                </button>
               </div>
 
-              <div className="ecdc-report-drawer__body">
+              <button className="ecdc-report-drawer__close" onClick={() => setReportOpen(false)}>✕</button>
+              </div>
+
+              <div className="ecdc-report-drawer__body" ref={drawerBodyRef}>
                 {selectedEcdcs.map((ecdc) => {
                   const dominantGroup = dominantGroupName(ecdc.practitioners);
                   const dc = resolveGroupColor(dominantGroup);
@@ -659,7 +692,7 @@ export default function ECDCMap() {
                           <button
                             className="ecdc-report-centre__remove"
                             onClick={(e) => {
-                              e.stopPropagation(); // IMPORTANT: prevents selecting row
+                              e.stopPropagation(); 
                               handleRemove(ecdc.id);
                             }}
                           > <CloseIcon />

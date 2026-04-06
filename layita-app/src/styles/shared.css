@@ -249,3 +249,200 @@
   color: var(--color-primary-deep);
   font-weight: 600;
 }
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   shared.mobile.css  –  Mobile & responsive overrides for shared.css
+   Import AFTER shared.css.
+
+   Breakpoints used across this project:
+     --bp-sm  : 480px  (small phones, portrait)
+     --bp-md  : 768px  (large phones / small tablets, portrait → landscape)
+     --bp-lg  : 1024px (tablets landscape / small laptops)
+───────────────────────────────────────────────────────────────────────────── */
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   TABLET  (≤ 1024px)
+   Sidebar starts to feel cramped at full width — switch to icon-only rail.
+══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  /* Auto-collapse the sidebar to the icon rail on tablets */
+  .sidebar {
+    width: 56px;
+    min-width: 56px;
+  }
+
+  .sidebar__logo {
+    width: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .sidebar__collapse-btn {
+    margin: 0 auto;
+  }
+
+  .sidebar__nav-label {
+    opacity: 0;
+    width: 0;
+    pointer-events: none;
+  }
+
+  /* Show tooltip on hover for collapsed state */
+  .sidebar__nav a::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+    font-size: 0.75rem;
+    font-family: 'Raleway', sans-serif;
+    padding: 4px 10px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    z-index: 9999;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .sidebar__nav a:hover::after {
+    opacity: 1;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   MOBILE  (≤ 768px)
+   Sidebar becomes a bottom navigation bar.
+══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  /* ── Page shell: vertical stack, bottom-nav layout ── */
+  .page {
+    flex-direction: column;
+    height: 100dvh; /* dynamic viewport height for mobile browsers */
+    overflow: hidden;
+  }
+
+  /* ── Sidebar → Bottom nav bar ── */
+  .sidebar {
+    width: 100%;
+    min-width: 0;
+    height: 60px;
+    min-height: 60px;
+    flex-direction: row;
+    border-right: none;
+    border-top: 1px solid var(--color-border);
+    /* Reorder: push to bottom */
+    order: 10;
+    z-index: 200;
+    overflow: visible;
+    flex-shrink: 0;
+    /* Reset the collapse transition */
+    transition: none;
+  }
+
+  /* Hide the sidebar top (logo + collapse button) on mobile */
+  .sidebar__top {
+    display: none;
+  }
+
+  /* ── Nav becomes a horizontal icon strip ── */
+  .sidebar__nav {
+    flex: 1;
+    padding: 0;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .sidebar__nav ul {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    align-items: stretch;
+  }
+
+  .sidebar__nav li {
+    flex: 1;
+    margin-bottom: 0;
+    display: flex;
+    align-items: stretch;
+  }
+
+  .sidebar__nav a {
+    flex: 1;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    padding: 6px 4px;
+    border-radius: 0;
+    font-size: 0.6rem;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  /* Show labels again (short) in bottom nav */
+  .sidebar__nav-label {
+    opacity: 1;
+    width: auto;
+    pointer-events: auto;
+    font-size: 0.6rem;
+    line-height: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 64px;
+  }
+
+  /* No tooltips in bottom-nav mode */
+  .sidebar__nav a::after,
+  .sidebar--collapsed .sidebar__nav a::after {
+    display: none !important;
+  }
+
+  /* Active state adapted for bottom bar */
+  .sidebar__nav a.active {
+    background: var(--color-primary-tint-15);
+    color: var(--color-primary-deep);
+    border-top: 2px solid var(--color-primary);
+  }
+
+  /* ── Hide footer (user block / legend) on mobile ── */
+  .sidebar__footer {
+    display: none;
+  }
+
+  /* ── Spinner stays consistent ── */
+  .spinner--md {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   SMALL PHONE  (≤ 480px)
+   Further reduce bottom nav icon/label size.
+══════════════════════════════════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  .sidebar {
+    height: 54px;
+    min-height: 54px;
+  }
+
+  .sidebar__nav a {
+    font-size: 0.55rem;
+    gap: 2px;
+    padding: 4px 2px;
+  }
+
+  .sidebar__nav-label {
+    display: none;
+  }
+}
