@@ -178,6 +178,11 @@
   opacity: 1;
 }
 
+/* Hide mobile logout button on desktop */
+.sidebar__nav-logout-mobile {
+  display: none;
+}
+
 /* ── Sidebar footer (used for legend etc.) ── */
 .sidebar__footer {
   padding: 10px 10px 16px;
@@ -398,6 +403,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 64px;
+  }
+
+  /* Show the mobile logout button */
+  .sidebar__nav-logout-mobile {
+    display: flex;
   }
 
   /* No tooltips in bottom-nav mode */
