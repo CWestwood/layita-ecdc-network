@@ -39,11 +39,17 @@ export default function PractitionerRow({ p, selected, lastVisit, onClick }: Pro
             <span className="p2-row__group-short">{resolveGroupNameShortForm(group)}</span>
           </span>
         )}
+        <span className="p2-row__ecdc-name"> Club </span>
       </div>
 
       <div className="p2-row__ecdc">
         <span className="p2-row__ecdc-name">{p.ecdc?.name || <em>No ECDC</em>}</span>
         {p.ecdc?.area && <span className="p2-row__ecdc-area">{p.ecdc.area}</span>}
+      </div>
+
+      <div className="p2-row__ecdc">
+        <span className="p2-row__ecdc-name">{p.ecdc?.chief || <em>No Chief</em>}</span>
+        <span className="p2-row__ecdc-name">{p.ecdc?.headman || <em>No Headman</em>}</span>
       </div>
 
       <div className="p2-row__visit">
@@ -52,6 +58,10 @@ export default function PractitionerRow({ p, selected, lastVisit, onClick }: Pro
 
       <div className="p2-row__training">
         <TrainingDots practitioner={p} />
+      </div>
+
+      <div className="p2-row__children-count">
+        {p.ecdc?.number_children ?? "—"}
       </div>
 
       <div className="p2-row__flags">

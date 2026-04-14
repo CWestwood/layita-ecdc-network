@@ -79,6 +79,7 @@ export function DetailPanel({ p, onClose }: Props) {
   const { level, label: visitLabel } = urgency(days);
   const count         = trainingCount(p);
   const visibleVisits = showAllVisits ? visits : visits.slice(0, VISIT_DISPLAY_LIMIT);
+  const mappingVisits = visits.filter(v => v.outreach_type === "ECDC Mapping");
 
   // Bug 1 fixed: useMemo was missing its callback — was `useMemo([rows])`
   const meaningful = useMemo(
@@ -135,7 +136,7 @@ export function DetailPanel({ p, onClose }: Props) {
           </div>
 
           <div className="p2-detail__meta-item">
-            <div className="p2-detail__meta-label">Last visit</div>
+            <div className="p2-detail__meta-label">Last Interaction</div>
             <div className={`p2-detail__meta-value p2-detail__meta-value--${level}`}>
               {visitsLoading ? "…" : days === Infinity ? "Never" : fmtDate(lastVisitDate)}
             </div>
@@ -164,6 +165,13 @@ export function DetailPanel({ p, onClose }: Props) {
             <div className="p2-detail__meta-label">Visits on record</div>
             <div className="p2-detail__meta-value">
               {visitsLoading ? "…" : visits.length}
+            </div>
+          
+            <div className="p2-detail__meta-item">
+              <div className="p2-detail__meta-label">Mapping Comments</div>
+              <div className="p2-visit__comment ">
+                {mappingVisits.find(v => v.comments)?.comments || "No comments"}
+              </div>
             </div>
           </div>
         </div>

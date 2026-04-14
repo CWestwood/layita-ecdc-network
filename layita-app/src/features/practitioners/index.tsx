@@ -22,12 +22,16 @@ import "../../styles/practitioners.css";
 // ─── ../lib ────────────────────────────────────────────────────────────────
 
 const SORT_OPTIONS = [
-  { key: "name_asc",       label: "Name A–Z"         },
-  { key: "name_desc",      label: "Name Z–A"         },
+  { key: "name_asc",       label: "Name (A–Z)"         },
+  { key: "name_desc",      label: "Name (Z–A)"         },
+  { key: "ecdc_asc",       label: "ECDC (A–Z)"         },
+  { key: "ecdc_desc",      label: "ECDC (Z–A)"         },
+  {key : "area_asc",        label: "Area (A–Z)"         },
+  {key : "area_desc",       label: "Area (Z–A)"         },
   { key: "visit_recent",   label: "Recently visited"  },
   { key: "visit_oldest",   label: "Longest overdue"   },
-  { key: "training_most",  label: "Most training"     },
-  { key: "training_least", label: "Least training"    },
+ // { key: "training_most",  label: "Most training"     },
+ // { key: "training_least", label: "Least training"    },
 ] as const;
 
 type SortKey = typeof SORT_OPTIONS[number]["key"];
@@ -41,6 +45,7 @@ export default function Practitioners() {
   const [viewMode,        setViewMode]        = useState<"list" | "grid">("list");
   const [activeGroups,    setActiveGroups]    = useState<string[]>([]);
   const [activeTraining,  setActiveTraining]  = useState<string[]>([]);
+  const [trainingMode,    setTrainingMode]    = useState<"has" | "needs">("has");
 
   // ── Data ──────────────────────────────────────────────────────────────────
   const { data: practitioners = [], isLoading: pracLoading  } = usePractitioners();
@@ -77,7 +82,10 @@ export default function Practitioners() {
         || p.ecdc?.name?.toLowerCase().includes(q)
         || p.group?.group_name?.toLowerCase().includes(q);
       const matchGroup    = activeGroups.length === 0 || activeGroups.includes(p.group?.group_name ?? "");
-        const matchTraining = activeTraining.length === 0 || activeTraining.every((k) => p.training?.[k] === true);
+      const matchTraining = activeTraining.length === 0 || activeTraining.every((k) => {
+        const hasTraining = p.training?.[k] === true;
+        return trainingMode === "has" ? hasTraining : !hasTraining;
+      });
       return matchSearch && matchGroup && matchTraining;
     });
 
@@ -89,10 +97,14 @@ export default function Practitioners() {
         case "visit_oldest":   return daysSince(lastVisitMap.get(b.id)) - daysSince(lastVisitMap.get(a.id));
         case "training_most":  return trainingCount(b) - trainingCount(a);
         case "training_least": return trainingCount(a) - trainingCount(b);
+        case "ecdc_asc":       return (a.ecdc?.name || "").localeCompare(b.ecdc?.name || "");
+        case "ecdc_desc":      return (b.ecdc?.name || "").localeCompare(a.ecdc?.name || "");
+        case "area_asc":       return (a.ecdc?.area || "").localeCompare(b.ecdc?.area || "");
+        case "area_desc":      return (b.ecdc?.area || "").localeCompare(a.ecdc?.area || "");
         default: return 0;
       }
     });
-  }, [practitioners, search, activeGroups, activeTraining, sortKey, lastVisitMap]);
+  }, [practitioners, search, activeGroups, activeTraining, trainingMode, sortKey, lastVisitMap]);
 
   const stats = useMemo(() => ({
     total:   practitioners.length,
@@ -112,7 +124,11 @@ export default function Practitioners() {
   const toggleTraining = useCallback((k: string) =>
     setActiveTraining((prev) => prev.includes(k) ? prev.filter((x) => x !== k) : [...prev, k]), []);
 
-  const clearFilters   = useCallback(() => { setActiveGroups([]); setActiveTraining([]); }, []);
+  const clearFilters   = useCallback(() => { 
+    setActiveGroups([]); 
+    setActiveTraining([]); 
+    setTrainingMode("has"); 
+  }, []);
 
   const handleSelect   = useCallback((p: Practitioner) =>
     setSelected((prev) => prev?.id === p.id ? null : p), []);
@@ -199,6 +215,21 @@ export default function Practitioners() {
           
           <span className="p2-filters__label">Training</span>
 
+          <div className="p2-segment-toggle">
+            <button
+              className={`p2-segment-btn ${trainingMode === "has" ? "p2-segment-btn--active" : ""}`}
+              onClick={() => setTrainingMode("has")}
+            >
+              Has had
+            </button>
+            <button
+              className={`p2-segment-btn ${trainingMode === "needs" ? "p2-segment-btn--active" : ""}`}
+              onClick={() => setTrainingMode("needs")}
+            >
+              Needs
+            </button>
+          </div>
+
           {TRAINING_FILTERS.map((f) => (
             <button
               key={f.key}
@@ -262,10 +293,12 @@ export default function Practitioners() {
               <>
                 <div className="p2-list-header">
                   <div>Name / Group</div>
-                  <div>ECDC</div>
-                  <div>Last Visit</div>
+                  <div>ECDC / Area</div>
+                  <div>Chief / Headman</div>
+                  <div>Last Interaction</div>
                   <div>Training</div>
-                  <div>Flags</div>
+                  <div># of Children</div>
+                  <div></div>
                 </div>
                 <div className="p2-list-scroll">
                   {filtered.map((p) => (

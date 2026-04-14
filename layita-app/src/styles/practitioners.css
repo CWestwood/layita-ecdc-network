@@ -255,6 +255,45 @@
   flex-shrink: 0;
 }
 
+/* ── Segmented Toggle ─────────────────────────────────────────────────────── */
+
+.p2-segment-toggle {
+  display: inline-flex;
+  border: 1px solid var(--color-border);
+  border-radius: 20px;
+  overflow: hidden;
+  height: 26px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.p2-segment-btn {
+  background: var(--color-bg-sunken);
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+  font-family: 'Raleway', sans-serif;
+  font-size: 0.70rem;
+  font-weight: 600;
+  transition: background 0.12s, color 0.12s;
+}
+
+.p2-segment-btn:not(:last-child) { border-right: 1px solid var(--color-border); }
+
+.p2-segment-btn--active {
+  background: var(--ly-color-orange-light);
+  color: var(--color-primary-deep);
+}
+
+.p2-segment-btn:hover:not(.p2-segment-btn--active) {
+  background: var(--color-bg-hover);
+  color: var(--color-text);
+}
+
 /* ── Filter Dropdowns (Mobile) ─────────────────────────────────────────────── */
 .p2-filter-select {
   display: none; /* Hidden on desktop */
@@ -351,7 +390,7 @@
 
 .p2-list-header {
   display: grid;
-  grid-template-columns: minmax(160px, 2fr) minmax(120px, 1.5fr) 140px minmax(100px, 1fr) 80px;
+  grid-template-columns: minmax(120px, 1fr) minmax(120px, 0.60fr) minmax(100px, 0.60fr) minmax(120px, 0.5fr) minmax(80px, 0.6fr) minmax(80px, 0.3fr) minmax(80px, 0.3fr);
   gap: 0;
   padding: 0 0 0 0;
   height: 34px;
@@ -385,7 +424,7 @@
 
 .p2-row {
   display: grid;
-  grid-template-columns: 4px minmax(160px, 2fr) minmax(120px, 1.5fr) 140px minmax(100px, 1fr) 80px;
+  grid-template-columns: 4px minmax(120px, 1fr) minmax(120px, 0.60fr) minmax(100px, 0.60fr) minmax(120px, 0.5fr) minmax(80px, 0.6fr) minmax(80px, 0.3fr) minmax(80px, 0.3fr);
   align-items: center;
   gap: 0;
   min-height: 54px;
@@ -482,12 +521,23 @@
   text-overflow: ellipsis;
 }
 
+.p2-row__children-count{
+  font-size: 0.68rem;
+  font-family: "Raleway", sans-serif;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: center;
+}
+
 .p2-row__visit { display: flex; align-items: center; justify-content: center; }
 
 .p2-row__training { display: flex; align-items: center; justify-content: center; }
 
 .p2-row__flags {
   display: flex;
+  flex-direction: column;
   align-items: center;
   gap: 5px;
   justify-content: center;
